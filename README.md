@@ -58,54 +58,55 @@ var ssrsMethods = new SSRSMethods("http://your-ssrs-server/ReportServer", "your-
 
 #### Upload an RDL File
 ```csharp
-var result = ssrsMethods.UploadRdlFile("ReportName", "/", @"C:\Path\To\YourReport.rdl");
+SSRSResult result = ssrsMethods.UploadRdlFile("ReportName", "/", @"C:\Path\To\YourReport.rdl");
 Console.WriteLine(result.Message);
 ```
 
 #### Create a Data Source with Credentials
 ```csharp
-var dataSourceResult = ssrsMethods.CreateDataSourceWithCredential(
+SSRSResult result = ssrsMethods.CreateDataSourceWithCredential(
     "DataSourceName",
     "Data Source=YourServer;Initial Catalog=YourDatabase;",
     "dbUsername",
     "dbPassword",
     "/"
 );
-Console.WriteLine(dataSourceResult.Message);
+Console.WriteLine(result.Message);
 ```
 
 #### set username,password and connection string to a Report
 ```csharp
 
-var x = ssrsMethods.SetCustomDataSourceToReport(
+SSRSResult result = ssrsMethods.SetCustomDataSourceToReport(
 "/SalesAmarForoshGorohForosh",
    "DataSource",
    "data source=dataSourceName;initial catalog=databaseName",
    "databaseUsername",
    "databasePassword"
 );
+Console.WriteLine(result.Message);
 ```
 
 
 #### Assign a Data Source to a Report
 ```csharp
-var assignResult = ssrsMethods.SetSharedDataSourceToReport(
+SSRSResult result = ssrsMethods.SetSharedDataSourceToReport(
    "/DataSourceName",
    "/ReportName",
    "DataSourceNameInReport"
 );
-Console.WriteLine(assignResult.Message);
+Console.WriteLine(result.Message);
 ```
 
 #### Update Report Parameters
 ```csharp
-var updateResult = ssrsMethods.UpdateReportParameters(
+SSRSResult result = ssrsMethods.UpdateReportParameters(
     "/ReportName",
     new List<string> { "Parameter1", "Parameter2" },
     new List<string> { "Enter Value 1", "Enter Value 2" },
     new List<string> { "DefaultValue1", "DefaultValue2" }
 );
-Console.WriteLine(updateResult.Message);
+Console.WriteLine(result.Message);
 ```
 
 #### List Data Sources of a Report
