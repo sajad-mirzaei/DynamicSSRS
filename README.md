@@ -35,7 +35,7 @@ DynamicSSRS is a flexible library designed for managing SQL Server Reporting Ser
 
 4. Add the namespace to your code:
    ```csharp
-   using WWWPDynamicSSRS;
+   using DynamicSSRS;
    
 ## Getting Started
 
