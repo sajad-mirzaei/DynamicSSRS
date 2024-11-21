@@ -20,7 +20,9 @@ namespace DynamicSSRS
                 List<CatalogItem> data = new List<CatalogItem>();
                 foreach (var item in items)
                 {
-                    if (typeName != "" && item.TypeName == typeName)
+                    if (typeName == "")
+                        data.Add(item);
+                    else if (item.TypeName == typeName)
                         data.Add(item);
                 }
 
@@ -360,6 +362,45 @@ namespace DynamicSSRS
                 };
             }
         }
+
+        public SSRSResult GetReportDataSources(string reportPath)
+        {
+            try
+            {
+                // دریافت Data Sources
+                var dataSources = rsClient.GetItemDataSources(reportPath);
+
+                if (dataSources == null || dataSources.Length == 0)
+                {
+                    return new SSRSResult
+                    {
+                        Status = ResultEnum.NotFound,
+                        Message = "No data sources found for the report " + reportPath,
+                        Data = null
+                    };
+                }
+
+                // استخراج لیست نام Data Sources
+                List<string> dataSourceNames = dataSources.Select(ds => ds.Name).ToList();
+
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = "Data sources retrieved successfully.",
+                    Data = dataSourceNames
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = "Error retrieving data sources: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
 
     }
 }
