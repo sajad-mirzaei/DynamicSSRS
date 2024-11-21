@@ -35,7 +35,7 @@ DynamicSSRS is a flexible library designed for managing SQL Server Reporting Ser
 
 4. Add the namespace to your code:
    ```csharp
-   using WWWPDynamicSSRS;
+   using DynamicSSRS;
    
 ## Getting Started
 
@@ -58,58 +58,86 @@ var ssrsMethods = new SSRSMethods("http://your-ssrs-server/ReportServer", "your-
 
 #### Upload an RDL File
 ```csharp
-var result = ssrsMethods.UploadRdlFile("ReportName", "/", @"C:\Path\To\YourReport.rdl");
+SSRSResult result = ssrsMethods.UploadRdlFile("ReportName", "/", @"C:\Path\To\YourReport.rdl");
 Console.WriteLine(result.Message);
-3. Perform Common Operations
 ```
 
 #### Create a Data Source with Credentials
 ```csharp
-var dataSourceResult = ssrsMethods.CreateDataSourceWithCredential(
+SSRSResult result = ssrsMethods.CreateDataSourceWithCredential(
     "DataSourceName",
     "Data Source=YourServer;Initial Catalog=YourDatabase;",
     "dbUsername",
     "dbPassword",
     "/"
 );
-Console.WriteLine(dataSourceResult.Message);
+Console.WriteLine(result.Message);
 ```
+
+#### set username,password and connection string to a Report
+```csharp
+
+SSRSResult result = ssrsMethods.SetCustomDataSourceToReport(
+"/SalesAmarForoshGorohForosh",
+   "DataSource",
+   "data source=dataSourceName;initial catalog=databaseName",
+   "databaseUsername",
+   "databasePassword"
+);
+Console.WriteLine(result.Message);
+```
+
 
 #### Assign a Data Source to a Report
 ```csharp
-var assignResult = ssrsMethods.AssignDataSourceToReport(
-    "/DataSourceName", 
-    "/ReportName", 
-    "DataSourceNameInReport"
+SSRSResult result = ssrsMethods.SetSharedDataSourceToReport(
+   "/DataSourceName",
+   "/ReportName",
+   "DataSourceNameInReport"
 );
-Console.WriteLine(assignResult.Message);
+Console.WriteLine(result.Message);
 ```
 
 #### Update Report Parameters
 ```csharp
-var updateResult = ssrsMethods.UpdateReportParameters(
+SSRSResult result = ssrsMethods.UpdateReportParameters(
     "/ReportName",
     new List<string> { "Parameter1", "Parameter2" },
     new List<string> { "Enter Value 1", "Enter Value 2" },
     new List<string> { "DefaultValue1", "DefaultValue2" }
 );
-Console.WriteLine(updateResult.Message);
+Console.WriteLine(result.Message);
 ```
 
 #### List Data Sources of a Report
 ```csharp
-var dataSourcesResult = ssrsMethods.GetReportDataSources("/ReportName");
-
-if (dataSourcesResult.Status == ResultEnum.Success)
+SSRSResult result = ssrsMethods.GetReportDataSources("/SalesAmarForoshGorohForosh");
+if (result.Status == ResultEnum.Success)
 {
-    foreach (var dataSource in dataSourcesResult.Data)
-    {
-        Console.WriteLine($"Data Source: {dataSource}");
-    }
+   foreach (string item in (List<string>)result.Data)
+   {
+       Console.WriteLine($"item: {item}");
+   }
 }
 else
 {
-    Console.WriteLine(dataSourcesResult.Message);
+   Console.WriteLine(result.Message);
+}
+```
+
+#### List Data Children of a server (folder)
+```csharp
+SSRSResult result = ssrsMethods.ListChildren();
+if (result.Status == ResultEnum.Success)
+{
+	foreach (CatalogItem item in (List<CatalogItem>)result.Data)
+	{
+		Console.WriteLine($"item: {item.Name + " - " + item.TypeName}");
+	}
+}
+else
+{
+	Console.WriteLine(result.Message);
 }
 ```
 
