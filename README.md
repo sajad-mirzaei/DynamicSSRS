@@ -60,7 +60,6 @@ var ssrsMethods = new SSRSMethods("http://your-ssrs-server/ReportServer", "your-
 ```csharp
 var result = ssrsMethods.UploadRdlFile("ReportName", "/", @"C:\Path\To\YourReport.rdl");
 Console.WriteLine(result.Message);
-3. Perform Common Operations
 ```
 
 #### Create a Data Source with Credentials
