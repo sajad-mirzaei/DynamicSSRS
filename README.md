@@ -74,12 +74,25 @@ var dataSourceResult = ssrsMethods.CreateDataSourceWithCredential(
 Console.WriteLine(dataSourceResult.Message);
 ```
 
+#### set username,password and connection string to a Report
+```csharp
+
+var x = ssrsMethods.SetCustomDataSourceToReport(
+"/SalesAmarForoshGorohForosh",
+   "DataSource",
+   "data source=dataSourceName;initial catalog=databaseName",
+   "databaseUsername",
+   "databasePassword"
+);
+```
+
+
 #### Assign a Data Source to a Report
 ```csharp
-var assignResult = ssrsMethods.AssignDataSourceToReport(
-    "/DataSourceName", 
-    "/ReportName", 
-    "DataSourceNameInReport"
+var assignResult = ssrsMethods.SetSharedDataSourceToReport(
+   "/DataSourceName",
+   "/ReportName",
+   "DataSourceNameInReport"
 );
 Console.WriteLine(assignResult.Message);
 ```
@@ -97,18 +110,33 @@ Console.WriteLine(updateResult.Message);
 
 #### List Data Sources of a Report
 ```csharp
-var dataSourcesResult = ssrsMethods.GetReportDataSources("/ReportName");
-
-if (dataSourcesResult.Status == ResultEnum.Success)
+SSRSResult result = ssrsMethods.GetReportDataSources("/SalesAmarForoshGorohForosh");
+if (result.Status == ResultEnum.Success)
 {
-    foreach (var dataSource in dataSourcesResult.Data)
-    {
-        Console.WriteLine($"Data Source: {dataSource}");
-    }
+   foreach (string item in (List<string>)result.Data)
+   {
+       Console.WriteLine($"item: {item}");
+   }
 }
 else
 {
-    Console.WriteLine(dataSourcesResult.Message);
+   Console.WriteLine(result.Message);
+}
+```
+
+#### List Data Children of a server (folder)
+```csharp
+SSRSResult result = ssrsMethods.ListChildren();
+if (result.Status == ResultEnum.Success)
+{
+	foreach (CatalogItem item in (List<CatalogItem>)result.Data)
+	{
+		Console.WriteLine($"item: {item.Name + " - " + item.TypeName}");
+	}
+}
+else
+{
+	Console.WriteLine(result.Message);
 }
 ```
 
