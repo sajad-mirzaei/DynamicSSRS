@@ -12,6 +12,7 @@ namespace DynamicSSRS
         {
             rsClient = new Authorize().Connect(serverUrl, userName, password, domain);
         }
+
         public SSRSResult ListChildren(string folderPath = "/", string typeName = "")
         {
             try
@@ -401,6 +402,174 @@ namespace DynamicSSRS
             }
         }
 
+        public SSRSResult UpdateReportParametersWithoutValues(string reportPath, List<string> parameters, List<string> prompts)
+        {
+            try
+            {
+                ItemParameter[] existingParameters = rsClient.GetItemParameters(reportPath, null, false, null, null);
+
+                var parametersToUpdate = new List<ItemParameter>();
+
+                var msg = "";
+                for (int i = 0; i < parameters.Count; i++)
+                {
+
+                    var parameter = Array.Find(existingParameters, p => p.Name == parameters[i]);
+                    if (parameter != null)
+                    {
+                        parameter.Prompt = prompts[i]; // تنظیم متن Prompt
+                        parameter.PromptUser = true; // نمایش پارامتر به کاربر
+                        parameter.PromptUserSpecified = true;
+
+                        //parameter.DefaultValues = new string[] { values[i] };
+                        /*if (paramName == "ServerName")
+                            parameter.DefaultValues = new string[] { "Server-Sql" }; // مقدار پیش‌فرض مشخص
+                        else if (paramName == "DatabaseName")
+                            parameter.DefaultValues = new string[] { "SAP-Kadbanoo" };*/
+
+                        parameter.DefaultValuesQueryBased = true;
+                        parameter.DefaultValuesQueryBasedSpecified = false;
+
+                        parametersToUpdate.Add(parameter);
+                    }
+                    else
+                    {
+                        msg = "Parameter " + parameters[i] + " not found.";
+                    }
+                }
+
+                if (parametersToUpdate.Count > 0)
+                {
+                    rsClient.SetItemParameters(reportPath, parametersToUpdate.ToArray());
+                    msg += " Parameters updated successfully.";
+                }
+                else
+                {
+                    msg += " No parameters updated.";
+                }
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = msg
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = "Error: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public SSRSResult SetCustomDataSourceToReportbyConnectString(
+            string reportPath,
+            string dataSourceName,
+            string connectionString,
+            string username,
+            string password)
+        {
+            try
+            {
+                // تعریف DataSourceDefinition
+                DataSourceDefinition dataSourceDefinition = new DataSourceDefinition
+                {
+                    CredentialRetrieval = CredentialRetrievalEnum.Store, // ذخیره اعتبارنامه‌ها
+                    ConnectString = connectionString,                   // رشته اتصال
+                    Enabled = true,
+                    EnabledSpecified = true,
+                    Extension = "SQL",                                  // نوع Data Source (SQL)
+                    ImpersonateUser = false,
+                    ImpersonateUserSpecified = true,
+                    WindowsCredentials = false,
+                    UserName = username,                                // نام کاربری
+                    Password = password                                 // رمز عبور
+                };
+
+                // تنظیم DataSource
+                DataSource[] dataSources = new DataSource[]
+                {
+                    new DataSource
+                    {
+                        Name = dataSourceName,   // نام Data Source در گزارش RDL
+                        Item = dataSourceDefinition
+                    }
+                };
+
+                // اعمال تغییرات به گزارش
+                rsClient.SetItemDataSources(reportPath, dataSources);
+
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = "Data source for report " + reportPath + " updated successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = "Error updating data source: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
+
+        public SSRSResult SetCustomDataSourceToReportWithoutConnectString(
+            string reportPath,
+            string dataSourceName,
+            string username,
+            string password)
+        {
+            try
+            {
+                // تعریف DataSourceDefinition
+                DataSourceDefinition dataSourceDefinition = new DataSourceDefinition
+                {
+                    CredentialRetrieval = CredentialRetrievalEnum.Store, // ذخیره اعتبارنامه‌ها
+                    UseOriginalConnectString = true,
+                    Enabled = true,
+                    EnabledSpecified = true,
+                    Extension = "SQL",                                  // نوع Data Source (SQL)
+                    ImpersonateUser = false,
+                    ImpersonateUserSpecified = true,
+                    WindowsCredentials = false,
+                    UserName = username,                                // نام کاربری
+                    Password = password                                 // رمز عبور
+                };
+
+                // تنظیم DataSource
+                DataSource[] dataSources = new DataSource[]
+                {
+                    new DataSource
+                    {
+                        Name = dataSourceName,   // نام Data Source در گزارش RDL
+                        Item = dataSourceDefinition
+                    }
+                };
+
+                // اعمال تغییرات به گزارش
+                rsClient.SetItemDataSources(reportPath, dataSources);
+
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = "Data source for report " + reportPath + " updated successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = "Error updating data source: " + ex.Message,
+                    Data = null
+                };
+            }
+        }
 
     }
 }
