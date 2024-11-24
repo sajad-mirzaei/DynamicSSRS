@@ -67,6 +67,101 @@ namespace DynamicSSRS
             }
         }
 
+        public SSRSResult CreateFolderIfNotExist(string folderName, string folderPath = "/")
+        {
+            try
+            {
+                // بررسی وجود فولدر
+                var items = rsClient.ListChildren(folderPath, false);
+                var existingFolder = items.FirstOrDefault(item => item.Name == folderName && item.TypeName == "Folder");
+
+                if (existingFolder != null)
+                {
+                    // فولدر از قبل وجود دارد
+                    return new SSRSResult
+                    {
+                        Status = ResultEnum.Success,
+                        Message = $"Folder '{folderName}' already exists.",
+                        Data = existingFolder.Path // مسیر فولدر موجود
+                    };
+                }
+
+                // اگر فولدر وجود ندارد، آن را بسازید
+                rsClient.CreateFolder(folderName, folderPath, null);
+
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = $"Folder '{folderName}' created successfully.",
+                    Data = $"{folderPath}/{folderName}" // مسیر فولدر ایجاد شده
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = $"Error creating folder: {ex.Message}",
+                    Data = null
+                };
+            }
+        }
+
+        public SSRSResult CreateFolderIfNotExist(string folderPath)
+        {
+            try
+            {
+                // استخراج نام فولدر از مسیر
+                string folderName = Path.GetFileName(folderPath.TrimEnd('/'));
+                string parentPath = Path.GetDirectoryName(folderPath.TrimEnd('/'))?.Replace('\\', '/');
+
+                if (string.IsNullOrEmpty(folderName) || string.IsNullOrEmpty(parentPath))
+                {
+                    return new SSRSResult
+                    {
+                        Status = ResultEnum.ValidationError,
+                        Message = "Invalid folder path.",
+                        Data = null
+                    };
+                }
+
+                // بررسی وجود فولدر
+                var items = rsClient.ListChildren(parentPath, false);
+                var existingFolder = items.FirstOrDefault(item => item.Name == folderName && item.TypeName == "Folder");
+
+                if (existingFolder != null)
+                {
+                    // فولدر از قبل وجود دارد
+                    return new SSRSResult
+                    {
+                        Status = ResultEnum.Success,
+                        Message = $"Folder '{folderName}' already exists.",
+                        Data = existingFolder.Path
+                    };
+                }
+
+                // اگر فولدر وجود ندارد، آن را بسازید
+                rsClient.CreateFolder(folderName, parentPath, null);
+
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = $"Folder '{folderName}' created successfully.",
+                    Data = $"{parentPath}/{folderName}" // مسیر فولدر ایجاد شده
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SSRSResult
+                {
+                    Status = ResultEnum.ServerError,
+                    Message = $"Error creating folder: {ex.Message}",
+                    Data = null
+                };
+            }
+        }
+
+
         public SSRSResult CreateDataSource(string name, string connectString, string parentFolder = "/")
         {
             DataSourceDefinition definition = new DataSourceDefinition();
