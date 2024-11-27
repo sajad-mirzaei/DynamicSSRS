@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicSSRS", "src\DynamicS
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SampleWebForm", "src\SampleWebForm\", "{06354553-AD8C-4908-8EFB-F7D0E663C9A7}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		ProjectReferences = "{869ca872-1fee-4574-8e39-f7306a6a95fa}|DynamicSSRS.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_64891"
 		Debug.AspNetCompiler.PhysicalPath = "src\SampleWebForm\"

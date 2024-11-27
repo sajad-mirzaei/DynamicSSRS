@@ -4,19 +4,11 @@ using System.IO;
 
 public partial class SSRSUploader : System.Web.UI.Page
 {
-
-
-    protected void ddddd_Click(object sender, System.EventArgs e)
-    {
-
-        GetForm();
-    }
-
     public SSRSResult GetForm()
     {
         var reportsFolderPathFirst = ReportsFolderPath.Text;
         var rdlFolderPath = RdlFolderPath.Text;
-        var serverUrl = RdlFolderPath.Text;
+        var serverUrl = ServerUrl.Text;
         var serverUsername = ServerUsername.Text;
         var serverPassword = ServerPassword.Text;
         var dataSourceUsername = DataSourceUsername.Text;
@@ -42,7 +34,6 @@ public partial class SSRSUploader : System.Web.UI.Page
         }
 
         var ssrsMethods = new SSRSMethods(serverUrl, serverUsername, serverPassword, "");
-
         var reportsFolderPath = ssrsMethods.CreateFolderIfNotExist(reportsFolderPathFirst);
 
         foreach (var filePath in rdlFiles)
@@ -57,19 +48,19 @@ public partial class SSRSUploader : System.Web.UI.Page
             }
 
             var reportDataSourceName = "";
-            var resultGetDS = ssrsMethods.GetReportDataSources(reportsFolderPath.Data.ToString() + "/" + reportName);
+            var resultGetDS = ssrsMethods.GetReportDataSources(reportsFolderPath.Data.ToString().TrimEnd('/') + "/" + reportName);
             if (resultGetDS.Status == ResultEnum.Success && resultGetDS.Data != null && ((List<string>)resultGetDS.Data).Count > 0)
             {
                 reportDataSourceName = ((List<string>)resultGetDS.Data)[0];
             }
             else
             {
-                resultGetDS.Message = resultGetDS.Message + " " + reportsFolderPath.Data.ToString() + "/" + reportName;
+                resultGetDS.Message = resultGetDS.Message + " " + reportsFolderPath.Data.ToString().TrimEnd('/') + "/" + reportName;
                 return resultGetDS;
             }
 
             var dataSourceResult = ssrsMethods.SetCustomDataSourceToReportWithoutConnectString(
-                reportsFolderPath.Data.ToString() + "/" + reportName,
+                reportsFolderPath.Data.ToString().TrimEnd('/') + "/" + reportName,
                 reportDataSourceName,
                 dataSourceUsername,
                 dataSourcePassword);
@@ -81,5 +72,10 @@ public partial class SSRSUploader : System.Web.UI.Page
         }
 
         return new SSRSResult { Status = ResultEnum.Success, Message = "All RDL files processed successfully!" };
+    }
+
+    protected void SubmitForm_Click(object sender, System.EventArgs e)
+    {
+        GetForm();
     }
 }

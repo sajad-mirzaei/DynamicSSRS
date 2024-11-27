@@ -109,6 +109,13 @@ namespace DynamicSSRS
 
         public SSRSResult CreateFolderIfNotExist(string folderPath)
         {
+            if (new string[] { "", "/", "\\" }.Contains(folderPath))
+                return new SSRSResult
+                {
+                    Status = ResultEnum.Success,
+                    Message = "Replaced with root path. mybe root is valid!",
+                    Data = "/"
+                };
             try
             {
                 // استخراج نام فولدر از مسیر
