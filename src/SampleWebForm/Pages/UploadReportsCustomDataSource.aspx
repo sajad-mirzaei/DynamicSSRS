@@ -1,4 +1,4 @@
-﻿<%@ Page Title="SSRS Uploader" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="SSRSUploader.aspx.cs" Inherits="SSRSUploader" %>
+﻿<%@ Page Title="SSRS Uploader" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="UploadReportsCustomDataSource.aspx.cs" Inherits="UploadReportsCustomDataSource" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <asp:UpdatePanel runat="server" ID="upForm" RenderMode="block" UpdateMode="Always">

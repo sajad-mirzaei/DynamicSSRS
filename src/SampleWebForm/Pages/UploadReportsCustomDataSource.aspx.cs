@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-public partial class SSRSUploader : System.Web.UI.Page
+public partial class UploadReportsCustomDataSource : System.Web.UI.Page
 {
     public SSRSResult GetForm()
     {
