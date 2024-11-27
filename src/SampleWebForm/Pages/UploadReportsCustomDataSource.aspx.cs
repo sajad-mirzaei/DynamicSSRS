@@ -66,7 +66,7 @@ public partial class UploadReportsCustomDataSource : System.Web.UI.Page
                 dataSourcePassword);
             if (dataSourceResult.Status != ResultEnum.Success)
             {
-                resultGetDS.Message = resultGetDS.Message + " " + filePath;
+                dataSourceResult.Message = dataSourceResult.Message + " " + filePath;
                 return dataSourceResult;
             }
         }
