@@ -50,7 +50,8 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/Pages/SSRSUploader.aspx">SSRSUploader</a></li>
+                        <li><a runat="server" href="~/Pages/UploadReportsCustomDataSource.aspx">Upload Reports With Custom DataSource</a></li>
+                        <li><a runat="server" href="~/Pages/UploadReportsSharedDataSource.aspx">Upload Reports With Shared DataSource</a></li>
                     </ul>
                 </div>
             </div>

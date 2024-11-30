@@ -1,4 +1,4 @@
-﻿<%@ Page Title="SSRS Uploader" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="UploadReportsCustomDataSource.aspx.cs" Inherits="UploadReportsCustomDataSource" %>
+﻿<%@ Page Title="SSRS Uploader" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="UploadReportsSharedDataSource.aspx.cs" Inherits="UploadReportsSharedDataSource" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="Server">
     <asp:UpdatePanel runat="server" ID="upForm" RenderMode="block" UpdateMode="Always">
@@ -35,12 +35,24 @@
                 <hr style="border: 1px solid">
 
                 <div class="form-group col-12 mb-3">
-                    <label for="DataSourceUsername">DataSource Username. (For DataSource Authentication)</label>
-                    <asp:TextBox runat="server" type="text" class="form-control" ID="DataSourceUsername" placeholder="Enter DataSource Username" required></asp:TextBox>
+                    <label for="NewDataSourceName">New DataSource Name. (For DataSource Authentication)</label>
+                    <asp:TextBox runat="server" type="text" class="form-control" ID="NewDataSourceName" style="min-width: 100%;" placeholder="Enter DataSource Name" required></asp:TextBox>
                 </div>
                 <div class="form-group col-12 mb-3">
-                    <label for="DataSourcePassword">DataSource Password. (For DataSource Authentication)</label>
-                    <asp:TextBox runat="server" type="password" class="form-control" ID="DataSourcePassword" placeholder="Enter DataSource Password" required></asp:TextBox>
+                    <label for="NewDataSourceConnectionString">New DataSource ConnectionString. (For DataSource Authentication)</label>
+                    <asp:TextBox runat="server" type="text" class="form-control" ID="NewDataSourceConnectionString" style="min-width: 100%;" placeholder="Enter DataSource ConnectionString" required></asp:TextBox>
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="NewDataSourceUsername">New DataSource Username. (For DataSource Authentication)</label>
+                    <asp:TextBox runat="server" type="text" class="form-control" ID="NewDataSourceUsername" style="min-width: 100%;" placeholder="Enter DataSource Username" required></asp:TextBox>
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="NewDataSourcePassword">New DataSource Password. (For DataSource Authentication)</label>
+                    <asp:TextBox runat="server" type="password" class="form-control" ID="NewDataSourcePassword" style="min-width: 100%;" placeholder="Enter DataSource Password" required></asp:TextBox>
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="NewDataSourceParentFolder">New DataSource Parent Folder. (For DataSource Authentication)</label>
+                    <asp:TextBox runat="server" type="text" class="form-control" ID="NewDataSourceParentFolder" style="min-width: 100%;" placeholder="Enter DataSource Parent Folder (/)" required></asp:TextBox>
                 </div>
 
                 <hr style="border: 1px solid">

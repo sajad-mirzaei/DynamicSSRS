@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-public partial class UploadReportsCustomDataSource : System.Web.UI.Page
+public partial class UploadReportsSharedDataSource : System.Web.UI.Page
 {
     public SSRSResult GetForm()
     {
@@ -11,8 +11,11 @@ public partial class UploadReportsCustomDataSource : System.Web.UI.Page
         var serverUrl = ServerUrl.Text;
         var serverUsername = ServerUsername.Text;
         var serverPassword = ServerPassword.Text;
-        var dataSourceUsername = DataSourceUsername.Text;
-        var dataSourcePassword = DataSourcePassword.Text;
+        var newDataSourceName = NewDataSourceName.Text;
+        var newDataSourceConnectionString = NewDataSourceConnectionString.Text;
+        var newDataSourceUsername = NewDataSourceUsername.Text;
+        var newDataSourcePassword = NewDataSourcePassword.Text;
+        var newDataSourceParentFolder = NewDataSourceParentFolder.Text;
 
         if (!Directory.Exists(rdlFolderPath))
         {
@@ -59,11 +62,25 @@ public partial class UploadReportsCustomDataSource : System.Web.UI.Page
                 return resultGetDS;
             }
 
-            var dataSourceResult = ssrsMethods.SetCustomDataSourceToReportWithoutConnectString(
-                reportsFolderPath.Data.ToString().TrimEnd('/') + "/" + reportName,
-                reportDataSourceName,
-                dataSourceUsername,
-                dataSourcePassword);
+            var resultCreateDataSource = ssrsMethods.CreateDataSourceWithCredential(
+                newDataSourceName,
+                newDataSourceConnectionString,
+                newDataSourceUsername,
+                newDataSourcePassword,
+                newDataSourceParentFolder
+                );
+            if (resultCreateDataSource.Status != ResultEnum.Success)
+            {
+                resultCreateDataSource.Message = resultCreateDataSource.Message + " " + filePath;
+                return resultCreateDataSource;
+            }
+
+            var reportPath = reportsFolderPath.Data.ToString().TrimEnd('/') + "/" + reportName;
+            var dataSourcePath = newDataSourceParentFolder.TrimEnd('/') + "/" + newDataSourceName;
+            var dataSourceResult = ssrsMethods.SetSharedDataSourceToReport(
+                dataSourcePath,
+                reportPath,
+                reportDataSourceName);
             if (dataSourceResult.Status != ResultEnum.Success)
             {
                 dataSourceResult.Message = dataSourceResult.Message + " " + filePath;
